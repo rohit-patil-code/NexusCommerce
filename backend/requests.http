@@ -1,0 +1,15 @@
+### Create a new product
+POST http://localhost:8081/api/products
+Content-Type: application/json
+
+{
+  "name": "High-Performance Laptop",
+  "description": "A very fast laptop for development and gaming.",
+  "price": 1200.00,
+  "stockQuantity": 50
+}
+
+###
+
+### Get all products
+GET http://localhost:8081/api/products

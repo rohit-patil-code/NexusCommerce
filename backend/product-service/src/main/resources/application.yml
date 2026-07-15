@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/product_db
+    username: product_service
+    password: product_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
