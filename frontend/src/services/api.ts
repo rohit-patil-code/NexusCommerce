@@ -30,12 +30,12 @@ async function fetchWithHandler(url: string, options: RequestInit = {}) {
     if (contentType && contentType.includes("application/json")) {
       return await response.json();
     }
-    
+
     // For endpoints that return plain text booleans or strings
     const text = await response.text();
     if (text === 'true') return true;
     if (text === 'false') return false;
-    
+
     return text;
   } catch (error) {
     console.error(`Network request failed for ${url}:`, error);
@@ -47,7 +47,7 @@ async function fetchWithHandler(url: string, options: RequestInit = {}) {
  * Fetches all products from the Product Service via API Gateway
  */
 export async function getProducts(): Promise<Product[]> {
-  return await fetchWithHandler('/api/product');
+  return await fetchWithHandler('/api/products');
 }
 
 /**

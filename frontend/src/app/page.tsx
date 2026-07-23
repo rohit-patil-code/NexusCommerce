@@ -1,7 +1,39 @@
-import { ShoppingCart } from "lucide-react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { ShoppingCart, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getProducts, Product } from "@/services/api";
 
 export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadProducts() {
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load products. Please check if the backend services are running.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    loadProducts();
+  }, []);
+
+  // Helper array of high-quality Unsplash images to use as placeholders for our seeded products
+  const placeholderImages = [
+    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop", // Laptop
+    "https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=2071&auto=format&fit=crop", // Keyboard
+    "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=2067&auto=format&fit=crop", // Mouse
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop"  // Fallback Watch
+  ];
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* Navigation */}
@@ -68,36 +100,53 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                { name: "Minimalist Watch", price: "$249.00", category: "Accessories", img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop" },
-                { name: "Premium Leather Bag", price: "$189.00", category: "Bags", img: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2069&auto=format&fit=crop" },
-                { name: "Wireless Headphones", price: "$329.00", category: "Electronics", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop" },
-                { name: "Smart Sunglasses", price: "$159.00", category: "Eyewear", img: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?q=80&w=2080&auto=format&fit=crop" }
-              ].map((product, i) => (
-                <div key={i} className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer">
-                  <div className="aspect-square bg-slate-100 relative overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img 
-                      src={product.img} 
-                      alt={product.name}
-                      className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors duration-300"></div>
-                    <div className="absolute top-4 right-4">
-                      <Button size="icon" variant="secondary" className="w-8 h-8 rounded-full bg-white/90 text-slate-900 shadow-sm opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                        <ShoppingCart className="w-4 h-4" />
-                      </Button>
+            {loading ? (
+              <div className="flex justify-center items-center py-20">
+                <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
+              </div>
+            ) : error ? (
+              <div className="text-center bg-red-50 text-red-600 rounded-xl p-8 max-w-lg mx-auto border border-red-100 shadow-sm">
+                <p className="font-medium text-lg">{error}</p>
+                <p className="text-sm text-red-500 mt-2">Did you restart the API Gateway and Product Service?</p>
+              </div>
+            ) : products.length === 0 ? (
+              <div className="text-center bg-slate-100 text-slate-500 rounded-xl p-8 max-w-lg mx-auto shadow-sm">
+                No products found in the database.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {products.map((product, i) => (
+                  <div key={product.id || i} className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-slate-100 transition-all duration-300 hover:-translate-y-1">
+                    <div className="aspect-video sm:aspect-square bg-slate-100 relative overflow-hidden flex-shrink-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img 
+                        src={placeholderImages[i % placeholderImages.length]} 
+                        alt={product.name || 'Product Image'}
+                        className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors duration-300"></div>
+                    </div>
+                    <div className="p-6 flex flex-col flex-grow">
+                      <h3 className="text-xl font-semibold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                        {product.name}
+                      </h3>
+                      <p className="text-slate-500 text-sm mb-6 line-clamp-3 flex-grow leading-relaxed">
+                        {product.description}
+                      </p>
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
+                        <span className="text-2xl font-bold text-slate-900">
+                          ${Number(product.price).toFixed(2)}
+                        </span>
+                        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-6 transition-colors shadow-sm">
+                          <ShoppingCart className="w-4 h-4 mr-2" />
+                          Add
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <p className="text-xs font-medium text-indigo-600 mb-1 tracking-wider uppercase">{product.category}</p>
-                    <h3 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">{product.name}</h3>
-                    <p className="text-slate-600 font-medium">{product.price}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       </main>
