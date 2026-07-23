@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ShoppingCart, Loader2, MapPin } from "lucide-react";
+import { ShoppingCart, Loader2, MapPin, Globe, MessageCircle, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProducts, Product } from "@/services/api";
 
@@ -40,14 +40,14 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="w-full px-4 md:px-8 lg:px-12 h-16 flex items-center justify-between">
           {/* Logo, Name, and Location */}
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
                 <span className="text-white font-bold text-xl leading-none">N</span>
               </div>
-              <span className="text-xl font-bold tracking-tight text-slate-900 hidden sm:block">
+              <span className="text-xl font-bold tracking-tight text-black hidden sm:block">
                 NexusCommerce
               </span>
             </div>
@@ -66,24 +66,24 @@ export default function Home() {
             <input 
               type="text" 
               placeholder="Search for products..." 
-              className="w-full max-w-md bg-white rounded-md border-2 border-slate-300 px-4 py-2 text-sm text-slate-900 placeholder:text-slate-500 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+              className="w-full max-w-md bg-white rounded-md border-2 border-slate-300 px-4 py-2 text-sm text-slate-900 placeholder:text-slate-500 shadow-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
             />
           </div>
 
           {/* Auth and Cart */}
           <div className="flex items-center gap-4">
             <div className="hidden sm:flex items-center gap-2">
-              <Button variant="ghost" className="text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 font-medium">
+              <Button variant="ghost" className="text-slate-600 hover:text-black hover:bg-gray-100 font-medium">
                 Sign In
               </Button>
-              <Button className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium shadow-sm transition-colors">
+              <Button className="bg-black hover:bg-gray-800 text-white font-medium shadow-sm transition-colors">
                 Sign Up
               </Button>
             </div>
             
             <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
             
-            <Button variant="ghost" size="icon" className="text-slate-600 hover:text-indigo-600 hover:bg-indigo-50">
+            <Button variant="ghost" size="icon" className="text-slate-600 hover:text-black hover:bg-gray-100">
               <ShoppingCart className="w-5 h-5" />
               <span className="sr-only">Cart</span>
             </Button>
@@ -91,17 +91,17 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="flex-1 w-full mt-12 md:mt-24 space-y-24 pb-24">
+      <main className="flex-1 w-full mt-12 md:mt-24 space-y-24 pb-24 px-4 md:px-8 lg:px-12">
         {/* Hero Section */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col items-start text-left space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 leading-tight">
-              Elevate Your <span className="text-indigo-600">Tech Workspace</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">
+              Elevate Your Tech Workspace
             </h1>
-            <p className="text-lg text-slate-500 max-w-lg leading-relaxed">
+            <p className="text-lg text-gray-600 max-w-lg leading-relaxed">
               Discover curated, premium tools designed for developers, creators, and modern professionals. Enhance your productivity with unparalleled aesthetics.
             </p>
-            <Button className="bg-indigo-600 text-white shadow-[0_0_15px_rgba(79,70,229,0.5)] hover:shadow-[0_0_25px_rgba(79,70,229,0.7)] hover:-translate-y-1 transition-all duration-300 px-8 py-6 rounded-full text-lg font-medium mt-4">
+            <Button className="bg-black text-white hover:bg-gray-800 rounded-md px-8 py-6 text-lg font-medium transition-colors mt-4">
               Shop the Collection
             </Button>
           </div>
@@ -132,29 +132,30 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {products.slice(0, 3).map((product, i) => (
-              <div key={product.id || i} className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-slate-100 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 p-4">
-                <div className="aspect-square bg-slate-50 relative overflow-hidden rounded-2xl mb-6">
+              <div key={product.id || i} className="group flex flex-col bg-gray-50 rounded-sm overflow-hidden transition-all duration-300 hover:shadow-xl">
+                <div className="aspect-square bg-white relative overflow-hidden">
+                  <div className="absolute top-3 left-3 bg-black text-white text-xs font-bold px-2 py-1 uppercase tracking-wider z-10">
+                    {i === 0 ? "New Arrival" : "Bestseller"}
+                  </div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={placeholderImages[(i + 1) % placeholderImages.length]}
                     alt={product.name || 'Product Image'}
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0">
-                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg rounded-full px-6 transition-all duration-300">
-                       <ShoppingCart className="w-4 h-4 mr-2" /> Add to Cart
-                    </Button>
-                  </div>
                 </div>
-                <div className="px-2 flex flex-col flex-grow">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                <div className="p-6 flex flex-col flex-grow">
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2 line-clamp-1">
                     {product.name}
                   </h3>
-                  <div className="flex items-center justify-between mt-auto">
+                  <div className="flex items-center justify-between mb-6">
                     <span className="text-xl font-bold text-slate-900">
                       ${Number(product.price).toFixed(2)}
                     </span>
                   </div>
+                  <Button className="w-full bg-black text-white hover:bg-gray-800 rounded-md px-6 py-4 transition-colors flex items-center justify-center font-medium mt-auto">
+                    <ShoppingCart className="w-4 h-4 mr-2" /> Add to Cart
+                  </Button>
                 </div>
               </div>
             ))}
@@ -169,24 +170,77 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full bg-slate-50 py-12 border-t border-slate-200 mt-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex flex-col gap-4 w-full md:w-auto max-w-sm">
-            <h4 className="font-semibold text-slate-900">Join our newsletter</h4>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder="Email address" 
-                className="flex-1 bg-white border border-slate-200 rounded-md px-4 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                required
-              />
-              <Button type="submit" className="bg-slate-900 hover:bg-slate-800 text-white rounded-md px-4 py-2 text-sm font-medium">
-                Subscribe
-              </Button>
-            </form>
+      <footer className="w-full bg-zinc-950 text-gray-300 py-16 mt-auto">
+        <div className="w-full px-4 md:px-8 lg:px-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded bg-white flex items-center justify-center">
+                  <span className="text-black font-bold text-xl leading-none">N</span>
+                </div>
+                <span className="text-xl font-bold tracking-tight text-white">
+                  NexusCommerce
+                </span>
+              </div>
+              <p className="text-sm text-gray-400 max-w-xs">
+                Equipping the next generation of builders and creators with premium, cutting-edge tools.
+              </p>
+              <div className="flex gap-4 mt-2">
+                <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-white hover:text-black transition-colors cursor-pointer text-white">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-white hover:text-black transition-colors cursor-pointer text-white">
+                  <MessageCircle className="w-4 h-4" />
+                </div>
+                <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-white hover:text-black transition-colors cursor-pointer text-white">
+                  <Share2 className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex flex-col gap-4">
+              <h4 className="font-bold text-white uppercase tracking-wider text-sm mb-2">Shop</h4>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Laptops</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Keyboards</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Accessories</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">New Arrivals</a>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <h4 className="font-bold text-white uppercase tracking-wider text-sm mb-2">Support</h4>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Help Center</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Returns</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Shipping Info</a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <h4 className="font-bold text-white uppercase tracking-wider text-sm mb-2">Stay Connected</h4>
+              <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  className="bg-zinc-900 border border-gray-800 rounded-md px-4 py-3 text-sm text-white focus:outline-none focus:border-white focus:ring-1 focus:ring-white w-full"
+                  required
+                />
+                <Button type="submit" className="bg-white text-black hover:bg-gray-200 rounded-md px-4 py-3 text-sm font-bold w-full transition-colors">
+                  Subscribe
+                </Button>
+              </form>
+              <p className="text-xs text-gray-500 mt-2">
+                By subscribing, you agree to our Privacy Policy. We respect your data.
+              </p>
+            </div>
           </div>
-          <div className="text-sm text-slate-500 text-center md:text-right">
-            © 2026 NexusCommerce Inc.<br/>All rights reserved.
+          
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-sm text-gray-500">
+              © 2026 NexusCommerce Inc. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              <a href="#" className="text-sm text-gray-500 hover:text-white transition-colors">Terms of Service</a>
+              <a href="#" className="text-sm text-gray-500 hover:text-white transition-colors">Privacy Policy</a>
+            </div>
           </div>
         </div>
       </footer>
