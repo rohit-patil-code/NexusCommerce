@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ShoppingCart, Loader2, MapPin, Globe, MessageCircle, Share2 } from "lucide-react";
+import { ShoppingCart, Loader2, MapPin, Globe, MessageCircle, Share2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProducts, Product } from "@/services/api";
 
@@ -39,59 +39,73 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans">
       {/* Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur-md">
-        <div className="w-full px-4 md:px-8 lg:px-12 h-16 flex items-center justify-between">
-          {/* Logo, Name, and Location */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
-                <span className="text-white font-bold text-xl leading-none">N</span>
+      <header className="sticky top-0 z-50 w-full flex flex-col">
+        {/* Tier 1 - Top Bar */}
+        <div className="w-full bg-white border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-8">
+            {/* Left: Logo and Location */}
+            <div className="flex items-center gap-6 shrink-0">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center">
+                  <span className="text-white font-bold text-xl leading-none">N</span>
+                </div>
+                <span className="text-xl font-bold tracking-tight text-black hidden sm:block">
+                  NexusCommerce
+                </span>
               </div>
-              <span className="text-xl font-bold tracking-tight text-black hidden sm:block">
-                NexusCommerce
-              </span>
-            </div>
-            
-            <div className="hidden md:flex items-center gap-1 hover:bg-slate-100 rounded-md p-2 cursor-pointer transition-colors">
-              <MapPin className="w-5 h-5 text-slate-500" />
-              <div className="flex flex-col">
-                <span className="text-[10px] text-slate-500 font-medium leading-none mb-0.5">Deliver to</span>
-                <span className="text-sm font-bold text-slate-900 leading-none">Bengaluru</span>
+              <div className="hidden md:flex items-center gap-1 hover:bg-gray-100 rounded-md p-2 cursor-pointer transition-colors">
+                <MapPin className="w-5 h-5 text-gray-500" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-gray-500 font-medium leading-none mb-0.5">Deliver to</span>
+                  <span className="text-sm font-bold text-black leading-none">Bengaluru</span>
+                </div>
               </div>
             </div>
-          </div>
-          
-          {/* Search Bar */}
-          <div className="flex-1 flex justify-center px-4 md:px-8">
-            <input 
-              type="text" 
-              placeholder="Search for products..." 
-              className="w-full max-w-md bg-white rounded-md border-2 border-slate-300 px-4 py-2 text-sm text-slate-900 placeholder:text-slate-500 shadow-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
-            />
-          </div>
 
-          {/* Auth and Cart */}
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2">
-              <Button variant="ghost" className="text-slate-600 hover:text-black hover:bg-gray-100 font-medium">
+            {/* Center: Massive Search Bar */}
+            <div className="flex-1 max-w-2xl hidden md:flex items-center">
+              <div className="relative w-full flex">
+                <input 
+                  type="text" 
+                  placeholder="Search for products..." 
+                  className="w-full bg-gray-100 border border-gray-300 rounded-l-md px-4 py-2.5 text-sm text-black placeholder:text-gray-500 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
+                />
+                <button className="bg-black text-white px-5 rounded-r-md hover:bg-gray-800 transition-colors flex items-center justify-center border border-black">
+                  <Search className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right: Auth and Cart */}
+            <div className="flex items-center gap-6 shrink-0">
+              <Button variant="ghost" className="text-black hover:bg-gray-100 font-medium hidden sm:flex">
                 Sign In
               </Button>
-              <Button className="bg-black hover:bg-gray-800 text-white font-medium shadow-sm transition-colors">
-                Sign Up
-              </Button>
+              <div className="flex items-center gap-2 cursor-pointer hover:text-gray-600 transition-colors group">
+                <div className="relative">
+                  <ShoppingCart className="w-6 h-6 text-black group-hover:text-gray-600 transition-colors" />
+                  <span className="absolute -top-1.5 -right-1.5 bg-black text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center group-hover:bg-gray-600 transition-colors">0</span>
+                </div>
+                <span className="hidden sm:block font-medium text-black group-hover:text-gray-600 transition-colors">Cart</span>
+              </div>
             </div>
-            
-            <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
-            
-            <Button variant="ghost" size="icon" className="text-slate-600 hover:text-black hover:bg-gray-100">
-              <ShoppingCart className="w-5 h-5" />
-              <span className="sr-only">Cart</span>
-            </Button>
+          </div>
+        </div>
+
+        {/* Tier 2 - Category Bar */}
+        <div className="w-full bg-black text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center gap-8 text-sm font-medium overflow-x-auto whitespace-nowrap scrollbar-hide">
+            <a href="#" className="hover:text-gray-300 transition-colors">All Categories</a>
+            <a href="#" className="hover:text-gray-300 transition-colors">Laptops</a>
+            <a href="#" className="hover:text-gray-300 transition-colors">Mechanical Keyboards</a>
+            <a href="#" className="hover:text-gray-300 transition-colors">Monitors</a>
+            <a href="#" className="hover:text-gray-300 transition-colors">New Arrivals</a>
+            <a href="#" className="hover:text-gray-300 transition-colors">Today&apos;s Deals</a>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 w-full mt-12 md:mt-24 space-y-24 pb-24 px-4 md:px-8 lg:px-12">
+      <main className="flex-1 w-full mt-6 md:mt-12 space-y-24 pb-24 px-4 md:px-8 lg:px-12">
         {/* Hero Section */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="flex flex-col items-start text-left space-y-6">
@@ -130,11 +144,11 @@ export default function Home() {
           <div className="flex justify-between items-end mb-10">
              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Curated Essentials</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {products.slice(0, 3).map((product, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.slice(0, 4).map((product, i) => (
               <div key={product.id || i} className="group flex flex-col bg-gray-50 rounded-sm overflow-hidden transition-all duration-300 hover:shadow-xl">
-                <div className="aspect-square bg-white relative overflow-hidden">
-                  <div className="absolute top-3 left-3 bg-black text-white text-xs font-bold px-2 py-1 uppercase tracking-wider z-10">
+                <div className="h-48 bg-gray-100 relative overflow-hidden shrink-0">
+                  <div className="absolute top-3 left-3 bg-black text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider z-10">
                     {i === 0 ? "New Arrival" : "Bestseller"}
                   </div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -144,17 +158,17 @@ export default function Home() {
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2 line-clamp-1">
+                <div className="p-4 flex flex-col flex-grow">
+                  <h3 className="text-sm font-semibold text-black mb-1 line-clamp-1">
                     {product.name}
                   </h3>
-                  <div className="flex items-center justify-between mb-6">
-                    <span className="text-xl font-bold text-slate-900">
+                  <div className="flex items-center justify-between mt-auto">
+                    <span className="text-sm text-gray-600">
                       ${Number(product.price).toFixed(2)}
                     </span>
                   </div>
-                  <Button className="w-full bg-black text-white hover:bg-gray-800 rounded-md px-6 py-4 transition-colors flex items-center justify-center font-medium mt-auto">
-                    <ShoppingCart className="w-4 h-4 mr-2" /> Add to Cart
+                  <Button className="w-full bg-black text-white hover:bg-gray-800 py-2 mt-4 rounded-md text-sm font-medium transition-colors">
+                    Add to Cart
                   </Button>
                 </div>
               </div>
