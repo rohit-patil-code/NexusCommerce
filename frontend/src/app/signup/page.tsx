@@ -5,8 +5,39 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { registerUser } from "@/services/api";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
+  const router = useRouter();
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await registerUser({ fullName, email, password });
+      router.push("/login");
+    } catch (err: any) {
+      setError(err.message || "Failed to register");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-4 font-sans py-12">
       <Card className="w-full max-w-md shadow-xl border-gray-200">
@@ -25,13 +56,20 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="pb-8">
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            {error && (
+              <div className="p-3 text-sm text-red-500 bg-red-50 rounded-md border border-red-200">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="fullName" className="text-sm font-semibold text-black">Full Name</Label>
               <Input 
                 id="fullName" 
                 type="text" 
                 placeholder="John Doe" 
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 required 
                 className="border-gray-300 focus-visible:ring-black focus-visible:border-black rounded-md px-4 py-6"
               />
@@ -41,7 +79,9 @@ export default function SignupPage() {
               <Input 
                 id="email" 
                 type="email" 
-                placeholder="m@example.com" 
+                placeholder="m@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required 
                 className="border-gray-300 focus-visible:ring-black focus-visible:border-black rounded-md px-4 py-6"
               />
@@ -50,7 +90,9 @@ export default function SignupPage() {
               <Label htmlFor="password" className="text-sm font-semibold text-black">Password</Label>
               <Input 
                 id="password" 
-                type="password" 
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required 
                 className="border-gray-300 focus-visible:ring-black focus-visible:border-black rounded-md px-4 py-6"
               />
@@ -59,14 +101,16 @@ export default function SignupPage() {
               <Label htmlFor="confirmPassword" className="text-sm font-semibold text-black">Confirm Password</Label>
               <Input 
                 id="confirmPassword" 
-                type="password" 
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 required 
                 className="border-gray-300 focus-visible:ring-black focus-visible:border-black rounded-md px-4 py-6"
               />
             </div>
             <div className="pt-2">
-              <Button type="submit" className="w-full bg-black text-white hover:bg-gray-800 rounded-md py-6 text-sm font-bold transition-colors">
-                Create Account
+              <Button type="submit" disabled={isLoading} className="w-full bg-black text-white hover:bg-gray-800 rounded-md py-6 text-sm font-bold transition-colors">
+                {isLoading ? "Creating Account..." : "Create Account"}
               </Button>
             </div>
           </form>

@@ -67,3 +67,24 @@ export async function placeOrder(orderPayload: any): Promise<any> {
     body: JSON.stringify(orderPayload),
   });
 }
+
+/**
+ * Registers a new user via the User Service
+ */
+export async function registerUser(payload: { fullName?: string, email?: string, password?: string }): Promise<any> {
+  return await fetchWithHandler('/api/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+/**
+ * Logs in a user via the User Service
+ */
+export async function loginUser(payload: { email?: string, password?: string }): Promise<any> {
+  return await fetchWithHandler('/api/auth/login', {
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(payload),
+  });
+}
