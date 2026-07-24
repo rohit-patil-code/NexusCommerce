@@ -27,13 +27,29 @@ export default function Home() {
     loadProducts();
   }, []);
 
-  // Helper array of high-quality Unsplash images to use as placeholders for our seeded products
-  const placeholderImages = [
-    "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop", // Laptop
-    "https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=2071&auto=format&fit=crop", // Keyboard
-    "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=2067&auto=format&fit=crop", // Mouse
-    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop"  // Fallback Watch
-  ];
+  const heroImage = "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=2071&auto=format&fit=crop";
+
+  const getImageForProduct = (name: string) => {
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes("laptop") || lowerName.includes("msi")) return "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=2068&auto=format&fit=crop";
+    if (lowerName.includes("keyboard") || lowerName.includes("keycap")) return "https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=2071&auto=format&fit=crop";
+    if (lowerName.includes("mouse")) return "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?q=80&w=2067&auto=format&fit=crop";
+    if (lowerName.includes("monitor")) return "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?q=80&w=2070&auto=format&fit=crop";
+    if (lowerName.includes("desk") && !lowerName.includes("mat") && !lowerName.includes("panel")) return "https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?q=80&w=2070&auto=format&fit=crop";
+    if (lowerName.includes("headphones") || lowerName.includes("audio") || lowerName.includes("noise-cancelling")) return "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop";
+    if (lowerName.includes("stand") || lowerName.includes("charger")) return "https://images.unsplash.com/photo-1586816879360-004f5b0c51e3?q=80&w=1974&auto=format&fit=crop";
+    if (lowerName.includes("mat")) return "https://images.unsplash.com/photo-1621360841013-c76831f478e1?q=80&w=2070&auto=format&fit=crop";
+    if (lowerName.includes("camera")) return "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=2070&auto=format&fit=crop";
+    if (lowerName.includes("panel")) return "https://images.unsplash.com/photo-1517502884422-41eaead166d4?q=80&w=1925&auto=format&fit=crop";
+    if (lowerName.includes("wrist")) return "https://images.unsplash.com/photo-1601445638532-3c6f6c3aa831?q=80&w=1974&auto=format&fit=crop";
+    if (lowerName.includes("dock")) return "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?q=80&w=2042&auto=format&fit=crop";
+    if (lowerName.includes("chair")) return "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?q=80&w=2069&auto=format&fit=crop";
+    if (lowerName.includes("cable") || lowerName.includes("spine")) return "https://images.unsplash.com/photo-1550009158-9effb61970b2?q=80&w=2128&auto=format&fit=crop";
+    if (lowerName.includes("ssd") || lowerName.includes("storage")) return "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?q=80&w=2021&auto=format&fit=crop";
+    if (lowerName.includes("light")) return "https://images.unsplash.com/photo-1517817745771-33a763db987b?q=80&w=2015&auto=format&fit=crop";
+    
+    return `https://picsum.photos/seed/${name.replace(/\s+/g, '')}/400/400`;
+  };
 
 
   return (
@@ -42,7 +58,7 @@ export default function Home() {
       <header className="sticky top-0 z-50 w-full flex flex-col">
         {/* Tier 1 - Top Bar */}
         <div className="w-full bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-8">
+          <div className="w-full px-4 md:px-8 lg:px-12 h-20 flex items-center justify-between gap-8">
             {/* Left: Logo and Location */}
             <div className="flex items-center gap-6 shrink-0">
               <div className="flex items-center gap-2">
@@ -94,7 +110,7 @@ export default function Home() {
 
         {/* Tier 2 - Category Bar */}
         <div className="w-full bg-black text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-12 flex items-center gap-8 text-sm font-medium overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="w-full px-4 md:px-8 lg:px-12 h-12 flex items-center gap-8 text-sm font-medium overflow-x-auto whitespace-nowrap scrollbar-hide">
             <a href="#" className="hover:text-gray-300 transition-colors">All Categories</a>
             <a href="#" className="hover:text-gray-300 transition-colors">Laptops</a>
             <a href="#" className="hover:text-gray-300 transition-colors">Mechanical Keyboards</a>
@@ -122,7 +138,7 @@ export default function Home() {
           <div className="relative aspect-square md:aspect-[4/3] w-full rounded-3xl overflow-hidden shadow-2xl bg-white border border-slate-100 flex items-center justify-center p-4">
              <div className="w-full h-full rounded-2xl overflow-hidden relative bg-slate-100">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={placeholderImages[0]} alt="Tech Workspace" className="object-cover w-full h-full" />
+                <img src={heroImage} alt="Tech Workspace" className="object-cover w-full h-full" />
              </div>
           </div>
         </section>
@@ -145,7 +161,7 @@ export default function Home() {
              <h2 className="text-3xl md:text-4xl font-bold text-slate-900">Curated Essentials</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.slice(0, 4).map((product, i) => (
+            {products.slice(0, 12).map((product, i) => (
               <div key={product.id || i} className="group flex flex-col bg-gray-50 rounded-sm overflow-hidden transition-all duration-300 hover:shadow-xl">
                 <div className="h-48 bg-gray-100 relative overflow-hidden shrink-0">
                   <div className="absolute top-3 left-3 bg-black text-white text-[10px] font-bold px-2 py-1 uppercase tracking-wider z-10">
@@ -153,7 +169,7 @@ export default function Home() {
                   </div>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={placeholderImages[(i + 1) % placeholderImages.length]}
+                    src={getImageForProduct(product.name || "Product")}
                     alt={product.name || 'Product Image'}
                     className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
