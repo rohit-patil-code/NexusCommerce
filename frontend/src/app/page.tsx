@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { ShoppingCart, Loader2, MapPin, Globe, MessageCircle, Share2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getProducts, Product } from "@/services/api";
@@ -94,8 +95,8 @@ export default function Home() {
 
             {/* Right: Auth and Cart */}
             <div className="flex items-center gap-6 shrink-0">
-              <Button variant="ghost" className="text-black hover:bg-gray-100 font-medium hidden sm:flex">
-                Sign In
+              <Button variant="ghost" className="text-black hover:bg-gray-100 font-medium hidden sm:flex" asChild>
+                <Link href="/login">Sign In</Link>
               </Button>
               <div className="flex items-center gap-2 cursor-pointer hover:text-gray-600 transition-colors group">
                 <div className="relative">
